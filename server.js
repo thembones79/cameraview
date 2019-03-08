@@ -25,6 +25,27 @@ app.post('/', (req, res)=>{
 // view latest image
 app.get('/', (req, res)=>{
 
+    // does this session have an image yet?
+    if(!latestPhoto){
+        return res.status(404).send("Nothing here yet");
+    }
+    console.log('sending photo');
+
+
+try {
+    // send the image
+    var img = Buffer.from(latestPhoto, 'base64');
+    res.writeHead(200, {
+        'Content-Type': 'image/png',
+        'Content-Length': img.length
+    });
+    res.end(img);
+} catch(e) {
+    // log the error and stay alive
+    console.log(e);
+    return res.sendStatus(500);
+}
+
 });
 
 
